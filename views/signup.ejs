@@ -84,6 +84,19 @@
   <body>
     <main class="container">
       <h1>Sign Up</h1>
+      <% if (locals.error) { %>
+      <div
+        style="
+          color: red;
+          margin-bottom: 1rem;
+          padding: 0.5rem;
+          background: #ffe6e6;
+          border-radius: 0.25rem;
+        "
+      >
+        <%= error %>
+      </div>
+      <% } %>
       <form id="signupForm" method="post" action="/signup">
         <div class="form-group">
           <label for="username">Username:</label>
@@ -92,10 +105,15 @@
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" name="email" required />
+          <div
+            id="emailError"
+            style="color: red; font-size: 0.875rem; margin-top: 0.25rem"
+          ></div>
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required />
+          <div id="passwordStrength" style="margin-top: 0.25rem"></div>
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirm Password:</label>
@@ -105,10 +123,111 @@
             name="confirmPassword"
             required
           />
+          <div
+            id="passwordMatch"
+            style="color: red; font-size: 0.875rem; margin-top: 0.25rem"
+          ></div>
         </div>
-        <button type="submit">Sign Up</button>
+        <button type="submit" id="submitBtn" disabled>Sign Up</button>
       </form>
       <p>Already have an account? <a href="/login">Login</a></p>
     </main>
+    <script>
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      function getPasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (password.length >= 12) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+
+        if (score < 3) return { level: "weak", color: "red" };
+        if (score < 5) return { level: "medium", color: "orange" };
+        return { level: "strong", color: "green" };
+      }
+
+      function updatePasswordStrength() {
+        const password = document.getElementById("password").value;
+        const strengthDiv = document.getElementById("passwordStrength");
+        const strength = getPasswordStrength(password);
+
+        if (password.length > 0) {
+          strengthDiv.innerHTML = `Password strength: <span style="color: ${strength.color}; font-weight: bold;">${strength.level}</span>`;
+        } else {
+          strengthDiv.innerHTML = "";
+        }
+
+        validateForm();
+      }
+
+      function validateEmail() {
+        const email = document.getElementById("email").value;
+        const emailError = document.getElementById("emailError");
+
+        if (email.length > 0 && !isValidEmail(email)) {
+          emailError.textContent = "Please enter a valid email address";
+        } else {
+          emailError.textContent = "";
+        }
+
+        validateForm();
+      }
+
+      function validatePasswordMatch() {
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const matchDiv = document.getElementById("passwordMatch");
+
+        if (confirmPassword.length > 0) {
+          if (password !== confirmPassword) {
+            matchDiv.textContent = "Passwords do not match";
+          } else {
+            matchDiv.textContent = "";
+          }
+        } else {
+          matchDiv.textContent = "";
+        }
+
+        validateForm();
+      }
+
+      function validateForm() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const submitBtn = document.getElementById("submitBtn");
+
+        const isEmailValid = isValidEmail(email);
+        const strength = getPasswordStrength(password);
+        const passwordsMatch = password === confirmPassword;
+
+        if (
+          isEmailValid &&
+          strength.level !== "weak" &&
+          passwordsMatch &&
+          password.length > 0
+        ) {
+          submitBtn.disabled = false;
+        } else {
+          submitBtn.disabled = true;
+        }
+      }
+
+      document.getElementById("email").addEventListener("input", validateEmail);
+      document
+        .getElementById("password")
+        .addEventListener("input", updatePasswordStrength);
+      document
+        .getElementById("confirmPassword")
+        .addEventListener("input", validatePasswordMatch);
+    </script>
   </body>
 </html>
