@@ -28,7 +28,7 @@ router.get("/signup", async (req, res) => {
   if (!req.user) {
     return res.render("signup");
   } else {
-    res.redirect("/home");
+    res.redirect("/login");
   }
 });
 
