@@ -170,6 +170,7 @@
           <thead>
             <th>S.no</th>
             <th>Short URL</th>
+            <th>Share short URL with others</th>
             <th>Redirect</th>
             <th>Clicks</th>
           </thead>
@@ -180,6 +181,8 @@
               <td><%= index + 1 %></td>
               <td><a href="/url/<%= url.shortID %>" target="_blank">
     /url/<%= url.shortID %></a></td>
+              <td><a href="/url/<%= url.shortID %>" target="_blank">
+    https://shortenurl-4k4m.onrender.com/url/<%= url.shortID %></a></td>
               <td><%= url.redirectURL %></td>
               <td><%= url.visitHistory.length %></td>
             </tr>
