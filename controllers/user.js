@@ -51,7 +51,7 @@ async function handleUserSignUp(req, res) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });
-  return res.redirect("/home");
+  return res.redirect("/login");
 }
 
 async function handleUserSignIn(req, res) {
