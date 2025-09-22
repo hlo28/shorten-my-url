@@ -150,13 +150,16 @@
       </form>
       <div class="shortenedUrl">
         <% if (locals.id) { %>
-        <label for="shortenedUrlOutput">Shortened URL:</label>
+      <div>
+        <span>Shortened URL: </span>
         <a href="/url/<%= id %>" target="_blank">/url/<%= id %></a>
+      </div>
+
         <input
           id="shortenedUrlOutput"
           type="url"
           readonly
-          value="/url/<%= id %>"
+          value="https://shortenurl-4k4m.onrender.com/url/<%= id %>"
           onclick="this.select();"
         />
         <% } %>
