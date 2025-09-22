@@ -169,7 +169,7 @@
         <table>
           <thead>
             <th>S.no</th>
-            <th>Short ID</th>
+            <th>Short URL</th>
             <th>Redirect</th>
             <th>Clicks</th>
           </thead>
@@ -178,7 +178,8 @@
             %>
             <tr>
               <td><%= index + 1 %></td>
-              <td><%= url.shortID %></td>
+              <td><a href="/url/<%= url.shortID %>" target="_blank">
+    /url/<%= url.shortID %></a></td>
               <td><%= url.redirectURL %></td>
               <td><%= url.visitHistory.length %></td>
             </tr>
